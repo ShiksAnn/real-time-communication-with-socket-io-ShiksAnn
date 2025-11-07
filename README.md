@@ -2,11 +2,12 @@ Project overview
 
 This repository delivers a two-folder project:
 
-server/ — Express server enhanced with Socket.io for real-time events, simple JWT auth (endpoints), MongoDB models (optional), message persistence, rooms, private messaging, typing indicators, read receipts, message pagination, and socket ack/delivery.
+*server/ — Express server enhanced with Socket.io for real-time events, simple JWT auth (endpoints), MongoDB models (optional), message persistence, rooms, private messaging, typing indicators, read receipts, message pagination, and socket ack/delivery.
 
-client/ — Vite + React app using socket.io-client, axios, react-router-dom, and TailwindCSS for UI. It includes a socket module and a useSocket pattern to interact with the server, UI components for chat, sidebar, typing indicator, notifications (sound + browser), pagination, and responsive layout.
+*client/ — Vite + React app using socket.io-client, axios, react-router-dom, and TailwindCSS for UI. It includes a socket module and a useSocket pattern to interact with the server, UI components for chat, sidebar, typing indicator, notifications (sound + browser), pagination, and responsive layout.
 
 The code intentionally keeps server and client separate so you can run and deploy them independently.
+
 
 Features implemented
 
@@ -20,6 +21,7 @@ Socket authentication using JWT from handshake.auth.token (server accepts token,
 
 Logs connected users to the console and emits online-users.
 
+
 Task 2 (Core chat)
 
 Username-based auth (register/login returning JWT).
@@ -31,6 +33,7 @@ Messages show sender, timestamp; UI auto-scrolls to newest.
 Typing indicators per room (typing event).
 
 Real-time online/offline status.
+
 
 Task 3 (Advanced — at least 3 implemented)
 
@@ -44,6 +47,7 @@ Pagination (load older messages via load-more).
 
 Delivery acknowledgements for send-message (via socket ack callback).
 
+
 Task 4 (Notifications)
 
 Real-time notifications for new messages and user joins/leaves.
@@ -51,6 +55,7 @@ Real-time notifications for new messages and user joins/leaves.
 Sound notification support (client loads notification.mp3).
 
 Browser notifications supported (UI can call Notification.requestPermission() — see suggestions).
+
 
 Task 5 (Performance & UX)
 
@@ -64,9 +69,8 @@ Message delivery ack implemented.
 
 Mobile responsive layout via Tailwind (basic; can be extended).
 
-Notes: File/image uploading support is scaffolded (message meta supports file URLs). Cloudinary integration is optional and left as an easy next step. Message reactions & search are scaffolded but left as optional extensions.
 
-```
+  ```
 Project structure
 week5-socketio-chat/
 ├── server/
@@ -106,6 +110,7 @@ week5-socketio-chat/
     │       ├── ChatWindow.jsx
     │       ├── Message.jsx
     │       └── TypingIndicator.jsx
+```
 
 
 Setup & run (local)
@@ -128,8 +133,9 @@ npm install
 
 If you get Vite errors like Failed to run dependency scan or missing modules, ensure you installed packages inside client/ (React, axios, react-router-dom, socket.io-client, tailwindcss, postcss, autoprefixer).
 
-2) Environment variables
 
+2) Environment variables
+```
 server/.env
 
 PORT=5000
@@ -137,13 +143,13 @@ MONGO_URI=mongodb://localhost:27017/week5chat   # optional
 JWT_SECRET=supersecretkey
 CLIENT_URL=http://localhost:5173
 CLOUDINARY_URL=...   # optional if you integrate Cloudinary
-
-
+```
+```
 client/.env
 
 VITE_API_URL=http://localhost:5000/api
 VITE_SOCKET_URL=http://localhost:5000
-
+```
 
 Make sure .env files are in the correct folders, and restart servers on change.
 
@@ -163,6 +169,7 @@ cd client
 npm run dev
 # open http://localhost:5173
 
+
 4) Register / Login (first run)
 
 Open the client in the browser: http://localhost:5173
@@ -172,7 +179,7 @@ Register a new user or login with username/password — frontend stores JWT in l
 The client connects to the /chat namespace and automatically authenticates via handshake.auth.token (sent in socket options).
 
 Environment & scripts quick reference
-
+```
 server/package.json (scripts)
 
 "scripts": {
@@ -188,6 +195,7 @@ client/package.json (scripts)
   "build": "vite build",
   "preview": "vite preview"
 }
+```
 
 API routes & Socket events (reference)
 HTTP endpoints
@@ -201,6 +209,7 @@ GET /api/auth/me — (Authorization: Bearer <token>) → { user }
 GET /api/rooms — list public rooms (optional)
 
 GET /api/messages — returns in-memory message history (or DB)
+
 
 Socket namespace
 
@@ -264,8 +273,6 @@ Read receipts & delivery ack
 send-message uses socket ack to inform the sender when the server persisted and emitted the message.
 
 mark-read updates Message.readBy and server notifies the sender with message-read.
-
-Notifications & sound
 
 Client plays notification.mp3 on new message events.
 
